@@ -1,0 +1,19 @@
+{
+  "name": "phonebook-backend",
+  "version": "1.0.0",
+  "description": "Back end for phonebook app",
+  "main": "index.js",
+  "scripts": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SoulAdor/Phonebook-Backend.git"
+  },
+  "author": "Andreas Niedens",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SoulAdor/Phonebook-Backend/issues"
+  },
+  "homepage": "https://github.com/SoulAdor/Phonebook-Backend#readme"
+}
