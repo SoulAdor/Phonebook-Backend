@@ -20,6 +20,8 @@ app.use(morgan(function (tokens, req, res) {
   ].join(' ')
 }))
 
+app.use(express.static('build'))
+
 let persons = [
   { 
     "name": "Arto Hellas", 
@@ -107,6 +109,8 @@ app.listen(PORT, () => {
 })
 
 const unknownEndpoint = (request, response) => {
+  console.log(PORT)
+  console.log(request.headers.host + '/' + request.url)
   response.status(404).send({ error: 'unknown endpoint' })
 }
 
