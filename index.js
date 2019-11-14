@@ -1,3 +1,6 @@
+// Require environment variables
+require('dotenv').config()
+
 const express = require('express')
 const app = express()
 
@@ -22,6 +25,8 @@ app.use(morgan(function (tokens, req, res) {
 
 app.use(express.static('build'))
 
+
+
 let persons = [
   { 
     "name": "Arto Hellas", 
@@ -45,14 +50,21 @@ let persons = [
   }
 ]
 
+// Get model of Person 
+const Person = require('./models/person')
+
+
 app.get('/api/persons/:id', (request, response) => {
-  const id = Number(request.params.id)
-  const note = persons.find(note => note.id === id)
-  note ? response.json(note) : response.status(404).end()
+  Person.findById(request.params.id).then(person => {
+    response.json(person.toJSON())
+  })
 })
 
+// Gets all persons from database
 app.get('/api/persons', (req, res) => {
-  res.json(persons)
+  Person.find({}).then(persons => {
+    res.json(persons.map(person => person.toJSON()))
+  })
 })
 
 app.get('/info', (req, res) => {
@@ -66,14 +78,16 @@ app.delete('/api/persons/:id', (request, response) => {
   persons = persons.filter(note => note.id !== id)
   response.status(204).end()
 })
- 
+
+/*
 function getRandomIndex(max) {
   return Math.floor(Math.random() * Math.floor(max));
 }
+*/
 
+// Posts new person to database
 app.post('/api/persons', (request, response) => {
   const body = request.body
-  const maxIndex = 1000
   
   if (!body.name) {
     return response.status(400).json({ 
@@ -81,6 +95,16 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
+  const person = new Person({
+    name: body.name,
+    number: body.number
+  })
+
+  person.save().then(savedPerson => {
+    response.json(savedPerson.toJSON())
+  })
+
+  /*
   if (!body.number) {
     return response.status(400).json({ 
       error: 'number missing' 
@@ -93,6 +117,7 @@ app.post('/api/persons', (request, response) => {
     })
   }
 
+  const maxIndex = 1000
   const person = {
     name: body.name,
     number: body.number,
@@ -101,9 +126,10 @@ app.post('/api/persons', (request, response) => {
 
   persons = persons.concat(person)
   response.json(person)
+  */
 })
 
-const PORT = process.env.PORT || 3001
+const PORT = process.env.PORT
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
 })
