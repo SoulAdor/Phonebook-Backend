@@ -5,6 +5,7 @@ const url = process.env.MONGODB_URI
 
 // Connect to url
 mongoose.set('useUnifiedTopology', true);
+mongoose.set('useFindAndModify', false)
 mongoose.connect(url, { useNewUrlParser: true }).then(result => {
   console.log('connected to MongoDB')
 })
